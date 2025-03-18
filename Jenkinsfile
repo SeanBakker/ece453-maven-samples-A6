@@ -21,7 +21,6 @@ pipeline {
         }
       }
     }
-  }
 
   }
   tools {
