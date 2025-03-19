@@ -5,6 +5,8 @@ pipeline {
       steps {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
         script {
+          env.CURRENT_COMMIT = env.GIT_COMMIT
+          
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
             def lastDescription = lastBuild.getDescription()
@@ -24,7 +26,7 @@ pipeline {
             bat 'mvn clean test'
 
             // Get current git commit
-            env.LAST_GOOD_COMMIT = env.GIT_COMMIT
+            env.LAST_GOOD_COMMIT = env.CURRENT_COMMIT
             echo "Captured commit: ${env.LAST_GOOD_COMMIT}"
 
             // Persist the value by updating the build description
@@ -32,7 +34,7 @@ pipeline {
 
           } catch (Exception e) {
             // Get current git commit
-            env.BAD_COMMIT = env.GIT_COMMIT
+            env.BAD_COMMIT = env.CURRENT_COMMIT
             echo "Captured commit: ${env.BAD_COMMIT}"
             env.TEST_FAILED = "true"
           }
@@ -67,6 +69,7 @@ pipeline {
     jdk 'DHT_SENSE'
   }
   environment {
+    CURRENT_COMMIT = ''
     LAST_GOOD_COMMIT = ''
     BAD_COMMIT = ''
     TEST_FAILED = 'false'
