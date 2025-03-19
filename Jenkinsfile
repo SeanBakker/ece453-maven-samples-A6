@@ -9,7 +9,7 @@ pipeline {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
           }
 
-          env.CURRENT_COMMIT = env.GIT_COMMIT
+          env.CURRENT_COMMIT = "%GIT_COMMIT%"
           echo "Captured commit: ${env.CURRENT_COMMIT}"
 
           def lastBuild = currentBuild.getPreviousBuild()
