@@ -26,6 +26,7 @@ pipeline {
             // If tests pass, store LAST_GOOD_COMMIT as the latest commit hash
             def currentCommitOutput = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
             env.LAST_GOOD_COMMIT = currentCommitOutput.tokenize("\r\n")[-1]
+            echo "Captured commit: ${env.LAST_GOOD_COMMIT}"
 
             // Persist the value by updating the build description
             currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
