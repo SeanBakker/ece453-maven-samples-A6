@@ -28,7 +28,7 @@ pipeline {
             env.LAST_GOOD_COMMIT = currentCommit
 
             // Persist the value by updating the build description
-            currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
+            currentBuild.setDescription("Last Good Commit: ${env.LAST_GOOD_COMMIT}")
 
           } catch (Exception e) {
             // If tests fail, mark the current commit as bad
