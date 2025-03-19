@@ -34,9 +34,12 @@ pipeline {
             currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
 
           } catch (Exception e) {
-            // If tests fail, mark the current commit as bad
-            def badCommitOutput = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
-            env.BAD_COMMIT = badCommitOutput.tokenize("\r\n")[-1]
+            // Run git rev-parse HEAD and explicitly capture output to a file
+            bat 'git rev-parse HEAD > commit_hash.txt'
+
+            // Read commit hash from the file
+            env.BAD_COMMIT = readFile('commit_hash.txt').trim()
+            echo "Captured commit: ${env.BAD_COMMIT}"
             env.TEST_FAILED = "true"
           }
         }
