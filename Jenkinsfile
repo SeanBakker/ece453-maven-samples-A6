@@ -78,7 +78,7 @@ pipeline {
     CURRENT_COMMIT = ''
     LAST_GOOD_COMMIT = ''
     BAD_COMMIT = ''
-    GIT_COMMIT_OVERRIDE = ''
+    GIT_COMMIT_OVERRIDE = '198644632661c67b6c32f59e9047c11a70685e15'
     TEST_FAILED = 'false'
   }
 }
