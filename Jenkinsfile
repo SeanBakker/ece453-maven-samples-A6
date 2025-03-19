@@ -24,15 +24,16 @@ pipeline {
             bat 'mvn clean test'
 
             // If tests pass, store LAST_GOOD_COMMIT as the latest commit hash
-            def currentCommit = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
-            env.LAST_GOOD_COMMIT = currentCommit
+            def currentCommitOutput = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            env.LAST_GOOD_COMMIT = currentCommitOutput.tokenize("\r\n")[-1]
 
             // Persist the value by updating the build description
-            currentBuild.setDescription("Last Good Commit: ${env.LAST_GOOD_COMMIT}")
+            currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
 
           } catch (Exception e) {
             // If tests fail, mark the current commit as bad
-            env.BAD_COMMIT = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            def badCommitOutput = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            env.BAD_COMMIT = badCommitOutput.tokenize("\r\n")[-1]
             env.TEST_FAILED = "true"
           }
         }
