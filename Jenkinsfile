@@ -5,14 +5,13 @@ pipeline {
       steps {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
         script {
-          // Override commit if set
           if (env.GIT_COMMIT_OVERRIDE?.trim()) {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
           }
-          
+
           env.CURRENT_COMMIT = env.GIT_COMMIT
           echo "Captured commit: ${env.CURRENT_COMMIT}"
-          
+
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
             def lastDescription = lastBuild.getDescription()
