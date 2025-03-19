@@ -5,9 +5,12 @@ pipeline {
       steps {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
         script {
-          def lastDescription = currentBuild.rawBuild.getPreviousBuild()?.getDescription()
-          if (lastDescription && lastDescription.startsWith("Last Good Commit:")) {
-            env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
+          def lastBuild = currentBuild.getPreviousBuild()
+          if (lastBuild) {
+            def lastDescription = lastBuild.getDescription()
+            if (lastDescription && lastDescription.startsWith("Last Good Commit:")) {
+                env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
+            }
           }
         }
 
