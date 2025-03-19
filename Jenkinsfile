@@ -9,7 +9,7 @@ pipeline {
           if (lastBuild) {
             def lastDescription = lastBuild.getDescription()
             if (lastDescription && lastDescription.startsWith("Last Good Commit:")) {
-                env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
+              env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
             }
           }
         }
