@@ -1,22 +1,16 @@
 pipeline {
   agent any
-  environment {
-    LAST_GOOD_COMMIT = ""
-    BAD_COMMIT = ""
-    TEST_FAILED = "false"
-  }
   stages {
     stage('check out') {
       steps {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
-
         script {
-          // Retrieve last good commit from previous build description
           def lastDescription = currentBuild.rawBuild.getPreviousBuild()?.getDescription()
           if (lastDescription && lastDescription.startsWith("Last Good Commit:")) {
             env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
           }
         }
+
       }
     }
 
@@ -39,12 +33,16 @@ pipeline {
             env.TEST_FAILED = "true"
           }
         }
+
       }
     }
 
     stage('git bisect (if tests fail)') {
       when {
-        expression { env.TEST_FAILED == "true" && env.LAST_GOOD_COMMIT != "" }
+        expression {
+          env.TEST_FAILED == "true" && env.LAST_GOOD_COMMIT != ""
+        }
+
       }
       steps {
         script {
@@ -55,11 +53,18 @@ pipeline {
           git bisect reset
           """
         }
+
       }
     }
+
   }
   tools {
     maven 'DHT_MVN'
     jdk 'DHT_SENSE'
+  }
+  environment {
+    LAST_GOOD_COMMIT = ''
+    BAD_COMMIT = ''
+    TEST_FAILED = 'false'
   }
 }
