@@ -23,22 +23,16 @@ pipeline {
           try {
             bat 'mvn clean test'
 
-            // Run git rev-parse HEAD and explicitly capture output to a file
-            bat 'git rev-parse HEAD > commit_hash.txt'
-
-            // Read commit hash from the file
-            env.LAST_GOOD_COMMIT = readFile('commit_hash.txt').trim()
+            // Run git rev-parse HEAD
+            env.LAST_GOOD_COMMIT = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
             echo "Captured commit: ${env.LAST_GOOD_COMMIT}"
 
             // Persist the value by updating the build description
             currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
 
           } catch (Exception e) {
-            // Run git rev-parse HEAD and explicitly capture output to a file
-            bat 'git rev-parse HEAD > commit_hash.txt'
-
-            // Read commit hash from the file
-            env.BAD_COMMIT = readFile('commit_hash.txt').trim()
+            // Run git rev-parse HEAD
+            env.BAD_COMMIT = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
             echo "Captured commit: ${env.BAD_COMMIT}"
             env.TEST_FAILED = "true"
           }
