@@ -6,6 +6,7 @@ pipeline {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
         script {
           env.CURRENT_COMMIT = env.GIT_COMMIT
+          echo "Captured commit: ${env.CURRENT_COMMIT}"
           
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
