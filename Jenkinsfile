@@ -7,7 +7,7 @@ pipeline {
       }
     }
 
-    stage('Git Bisect') {
+    stage('git bisect') {
       steps {
         script {
           def badCommit = '198644632661c67b6c32f59e9047c11a70685e15'
