@@ -5,6 +5,11 @@ pipeline {
       steps {
         git(url: 'https://github.com/SeanBakker/ece453-maven-samples.git', branch: 'master')
         script {
+          // Override commit if set
+          if (env.GIT_COMMIT_OVERRIDE?.trim()) {
+            bat "git checkout %GIT_COMMIT_OVERRIDE%"
+          }
+          
           env.CURRENT_COMMIT = env.GIT_COMMIT
           echo "Captured commit: ${env.CURRENT_COMMIT}"
           
@@ -73,6 +78,7 @@ pipeline {
     CURRENT_COMMIT = ''
     LAST_GOOD_COMMIT = ''
     BAD_COMMIT = ''
+    GIT_COMMIT_OVERRIDE = ''
     TEST_FAILED = 'false'
   }
 }
