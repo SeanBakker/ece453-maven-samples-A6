@@ -23,9 +23,11 @@ pipeline {
           try {
             bat 'mvn clean test'
 
-            // If tests pass, store LAST_GOOD_COMMIT as the latest commit hash
-            def currentCommitOutput = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
-            env.LAST_GOOD_COMMIT = currentCommitOutput.tokenize("\r\n")[-1]
+            // Run git rev-parse HEAD and explicitly capture output to a file
+            bat 'git rev-parse HEAD > commit_hash.txt'
+
+            // Read commit hash from the file
+            env.LAST_GOOD_COMMIT = readFile('commit_hash.txt').trim()
             echo "Captured commit: ${env.LAST_GOOD_COMMIT}"
 
             // Persist the value by updating the build description
