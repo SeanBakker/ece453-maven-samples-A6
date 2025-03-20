@@ -12,6 +12,7 @@ pipeline {
               submoduleCfg: [],
               userRemoteConfigs: [[url: 'https://github.com/SeanBakker/ece453-maven-samples.git']]
           ])
+          echo "SCM variables: ${scm}"
 
           if (env.GIT_COMMIT_OVERRIDE?.trim()) {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
