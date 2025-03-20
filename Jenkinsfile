@@ -19,7 +19,7 @@ pipeline {
           }
 
           env.CURRENT_COMMIT = scm['GIT_COMMIT']
-          echo "Captured commit: ${env.CURRENT_COMMIT}"
+          echo "Captured commit: ${env['CURRENT_COMMIT']}"
 
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
