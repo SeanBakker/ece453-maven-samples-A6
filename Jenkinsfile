@@ -16,9 +16,10 @@ pipeline {
 
           if (GIT_COMMIT_OVERRIDE?.trim()) {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
+            CURRENT_COMMIT = GIT_COMMIT_OVERRIDE
+          } else {
+            CURRENT_COMMIT = scm['GIT_COMMIT']
           }
-
-          CURRENT_COMMIT = scm['GIT_COMMIT']
           echo "Captured commit: ${CURRENT_COMMIT}"
 
           def lastBuild = currentBuild.getPreviousBuild()
