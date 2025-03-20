@@ -14,7 +14,7 @@ pipeline {
           ])
           echo "SCM variables: ${scm}"
 
-          if (GIT_COMMIT_OVERRIDE?.trim()) {
+          if (env.GIT_COMMIT_OVERRIDE?.trim()) {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
           }
 
