@@ -18,8 +18,8 @@ pipeline {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
           }
 
-          env.CURRENT_COMMIT = scm.GIT_COMMIT
-          echo "Captured commit: ${scm.GIT_COMMIT}"
+          env.CURRENT_COMMIT = scm['GIT_COMMIT']
+          echo "Captured commit: ${scm['GIT_COMMIT']}"
 
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
