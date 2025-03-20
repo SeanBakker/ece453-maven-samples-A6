@@ -5,12 +5,12 @@ pipeline {
       steps {
         script {
           def scm = checkout([
-              $class: 'GitSCM',
-              branches: [[name: 'master']],
-              doGenerateSubmoduleConfigurations: false,
-              extensions: [[$class: 'CloneOption', shallow: false, noTags: false]],
-              submoduleCfg: [],
-              userRemoteConfigs: [[url: 'https://github.com/SeanBakker/ece453-maven-samples.git']]
+            $class: 'GitSCM',
+            branches: [[name: 'master']],
+            doGenerateSubmoduleConfigurations: false,
+            extensions: [[$class: 'CloneOption', shallow: false, noTags: false]],
+            submoduleCfg: [],
+            userRemoteConfigs: [[url: 'https://github.com/SeanBakker/ece453-maven-samples.git']]
           ])
           echo "SCM variables: ${scm}"
 
