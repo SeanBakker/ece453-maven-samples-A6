@@ -15,7 +15,7 @@ pipeline {
           echo "SCM variables: ${scm}"
 
           if (GIT_COMMIT_OVERRIDE?.trim()) {
-            bat "git checkout %GIT_COMMIT_OVERRIDE%"
+            bat "git checkout ${GIT_COMMIT_OVERRIDE}"
             CURRENT_COMMIT = GIT_COMMIT_OVERRIDE
           } else {
             CURRENT_COMMIT = scm['GIT_COMMIT']
@@ -68,8 +68,8 @@ pipeline {
       steps {
         script {
           bat """
-          echo Running git bisect between %LAST_GOOD_COMMIT% (good) and %BAD_COMMIT% (bad)
-          git bisect start %BAD_COMMIT% %LAST_GOOD_COMMIT%
+          echo Running git bisect between ${LAST_GOOD_COMMIT} (good) and ${BAD_COMMIT} (bad)
+          git bisect start ${BAD_COMMIT} ${LAST_GOOD_COMMIT}
           git bisect run mvn clean test
           git bisect reset
           """
