@@ -14,18 +14,18 @@ pipeline {
           ])
           echo "SCM variables: ${scm}"
 
-          if (env['GIT_COMMIT_OVERRIDE']?.trim()) {
+          if (env.GIT_COMMIT_OVERRIDE?.trim()) {
             bat "git checkout %GIT_COMMIT_OVERRIDE%"
           }
 
-          env['CURRENT_COMMIT'] = scm['GIT_COMMIT']
-          echo "Captured commit: ${env['CURRENT_COMMIT']}"
+          env.CURRENT_COMMIT = scm['GIT_COMMIT']
+          echo "Captured commit: ${scm['GIT_COMMIT']}"
 
           def lastBuild = currentBuild.getPreviousBuild()
           if (lastBuild) {
             def lastDescription = lastBuild.getDescription()
             if (lastDescription && lastDescription.startsWith("Last Good Commit:")) {
-              env['LAST_GOOD_COMMIT'] = lastDescription.split(":")[1].trim()
+              env.LAST_GOOD_COMMIT = lastDescription.split(":")[1].trim()
             }
           }
         }
@@ -40,17 +40,17 @@ pipeline {
             bat 'mvn clean test'
 
             // Get current git commit
-            env['LAST_GOOD_COMMIT'] = env['CURRENT_COMMIT']
-            echo "Captured commit: ${env['LAST_GOOD_COMMIT']}"
+            env.LAST_GOOD_COMMIT = env.CURRENT_COMMIT
+            echo "Captured commit: ${env.LAST_GOOD_COMMIT}"
 
             // Persist the value by updating the build description
-            currentBuild.description = "Last Good Commit: ${env['LAST_GOOD_COMMIT']}"
+            currentBuild.description = "Last Good Commit: ${env.LAST_GOOD_COMMIT}"
 
           } catch (Exception e) {
             // Get current git commit
-            env['BAD_COMMIT'] = env['CURRENT_COMMIT']
-            echo "Captured commit: ${env['BAD_COMMIT']}"
-            env['TEST_FAILED'] = "true"
+            env.BAD_COMMIT = env.CURRENT_COMMIT
+            echo "Captured commit: ${env.BAD_COMMIT}"
+            env.TEST_FAILED = "true"
           }
         }
 
@@ -60,7 +60,7 @@ pipeline {
     stage('git bisect (if tests fail)') {
       when {
         expression {
-          env['TEST_FAILED'] == "true" && env['LAST_GOOD_COMMIT'] != ""
+          env.TEST_FAILED == "true" && env.LAST_GOOD_COMMIT != ""
         }
 
       }
